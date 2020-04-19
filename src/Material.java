@@ -55,6 +55,10 @@ public abstract class Material   {
         return price;
     }
 
+    public String getDate() {
+        return date;
+    }
+
 
     public abstract Date getExpiryDate() throws ParseException;
 

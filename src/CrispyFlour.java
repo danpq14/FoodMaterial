@@ -8,6 +8,16 @@ public class CrispyFlour extends Material implements Discount {
         super(ID, name, weight, unit, price,date);
     }
 
+    @Override
+    public Date getExpiryDate() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date dateOfManufacture = formatter.parse(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateOfManufacture);
+        calendar.add(Calendar.YEAR, 1);
+        return calendar.getTime();
+    }
+
 
     @Override
     public double charge() {
@@ -23,7 +33,7 @@ public class CrispyFlour extends Material implements Discount {
 
     @Override
     public double chargeDiscount() throws ParseException {
-        Date now = new Date();
+        Date today = new Date();
         Date expiryDate = getExpiryDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(expiryDate);
@@ -31,8 +41,8 @@ public class CrispyFlour extends Material implements Discount {
         Date discountDate20 = calendar.getTime();
         calendar.add(Calendar.MONTH, 2);
         Date discountDate40 = calendar.getTime();
-        int isDiscounted20 = now.compareTo(discountDate20);
-        int isDiscounted40 = now.compareTo(discountDate40);
+        int isDiscounted20 = today.compareTo(discountDate20);
+        int isDiscounted40 = today.compareTo(discountDate40);
         if (isDiscounted20 >= 0 && isDiscounted40 < 0) {
             return charge()*0.8;
         }
@@ -49,16 +59,4 @@ public class CrispyFlour extends Material implements Discount {
     public void priceDifferent() throws ParseException {
         System.out.println("Số tiền tiết kiệm được so với giá gốc : " + (charge()-chargeDiscount()));
     }
-
-    @Override
-    public Date getExpiryDate() throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateOfManufacture = formatter.parse(date);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateOfManufacture);
-        calendar.add(Calendar.YEAR, 1);
-        return calendar.getTime();
-    }
-
-
 }

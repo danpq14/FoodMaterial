@@ -10,6 +10,16 @@ public class Meat extends Material implements  Discount{
     }
 
     @Override
+    public Date getExpiryDate() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date dateOfManufacture = formatter.parse(date);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateOfManufacture);
+        calendar.add(Calendar.DATE, 15);
+        return calendar.getTime();
+    }
+
+    @Override
     public double charge() {
         double cost = 0.0;
         if (getUnit() == "kg") {
@@ -21,9 +31,10 @@ public class Meat extends Material implements  Discount{
         return cost;
     }
 
+
     @Override
     public double chargeDiscount() throws ParseException {
-        Date now = new Date();
+        Date today = new Date();
         Date expiryDate = getExpiryDate();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(expiryDate);
@@ -31,8 +42,8 @@ public class Meat extends Material implements  Discount{
         Date discountDate30 = calendar.getTime();
         calendar.add(Calendar.DATE, 2);
         Date discountDate50 = calendar.getTime();
-        int isDiscounted30 = now.compareTo(discountDate30);
-        int isDiscounted50 = now.compareTo(discountDate50);
+        int isDiscounted30 = today.compareTo(discountDate30);
+        int isDiscounted50 = today.compareTo(discountDate50);
         if (isDiscounted30 >= 0 && isDiscounted50 < 0) {
             return charge()*0.7;
         }
@@ -50,13 +61,4 @@ public class Meat extends Material implements  Discount{
         System.out.println("Số tiền tiết kiệm được so với giá gốc : " + (charge()-chargeDiscount()));
     }
 
-    @Override
-    public Date getExpiryDate() throws ParseException {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateOfManufacture = formatter.parse(date);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(dateOfManufacture);
-        calendar.add(Calendar.DATE, 15);
-        return calendar.getTime();
-    }
 }
